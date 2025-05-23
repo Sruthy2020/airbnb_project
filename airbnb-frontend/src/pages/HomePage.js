@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ListingCard from '../components/ListingCard';
 import './global.css';
@@ -10,29 +10,40 @@ const HomePage = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [limit, setLimit] = useState(10);
+  const [searchTriggered, setSearchTriggered] = useState(false); // ✅ flag to control useEffect
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchListings = async (params) => {
     setLoading(true);
     setErrorMsg('');
     try {
       const res = await axios.get(`http://localhost:3001/api/listings/filter`, {
-        params: { location, type: propertyType, bedrooms },
+        params: { ...params, limit },
       });
-
-      console.log("Fetched listings:", res.data);
       setListings(res.data);
     } catch (err) {
-      console.error("Error fetching listings:", err);
       setErrorMsg('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLimit(10); 
+    setSearchTriggered(true);
+    fetchListings({ location, type: propertyType, bedrooms });
+  };
+
+  useEffect(() => {
+    if (searchTriggered) {
+      fetchListings({ location, type: propertyType, bedrooms });
+    }
+  }, [limit]);
+
   return (
     <div className="homepage">
-      <h1>Find Your Ideal Stay</h1>
+      <h1>Listings that match your preferences</h1>
       <form className="search-form" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -66,12 +77,23 @@ const HomePage = () => {
       <div className="results">
         {loading ? (
           <p>Loading listings...</p>
-        ) : listings.length === 0 ? (
-          <p>No listings found. Try searching with different filters.</p>
+        ) : listings.length === 0 && searchTriggered ? (
+          <p>No listings found. Try different filters.</p>
         ) : (
           listings.map((listing) => (
             <ListingCard key={listing._id} listing={listing} />
           ))
+        )}
+
+        {listings.length >= limit && searchTriggered && (
+           <div className="load-more-container">
+          <button
+            onClick={() => setLimit(limit + 10)}
+            className="load-more-btn"
+          >
+            Load More
+          </button>
+        </div>
         )}
       </div>
     </div>

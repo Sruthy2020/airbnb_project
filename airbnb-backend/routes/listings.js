@@ -19,7 +19,9 @@ router.get("/filter", async (req, res) => {
     };
     console.log("Final MongoDB Query:", query); 
 
-    const listings = await collection.find(query).limit(10).toArray();
+    const limit = parseInt(req.query.limit) || 10;
+    const listings = await collection.find(query).limit(limit).toArray();
+
     res.json(listings);
   } catch (err) {
     console.error("Failed to fetch listings:", err);

@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './global.css';
+import { useLocation } from 'react-router-dom';
 
 
 const BookingPage = () => {
-  const { listingId } = useParams();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const listingId = params.get("listing_id");
+  
   const navigate = useNavigate();
   const [form, setForm] = useState({
     startDate: '',
