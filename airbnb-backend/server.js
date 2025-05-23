@@ -1,17 +1,21 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const client = require('./db');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+require("dotenv").config();
+
+const listingRoutes = require("./routes/listings");
+const bookingRoutes = require("./routes/bookings");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/listings', require('./routes/listings'));
-app.use('/api/bookings', require('./routes/bookings'));
+app.use("/api/listings", listingRoutes);
+app.use("/api/bookings", bookingRoutes);
 
-const PORT = process.env.PORT || 3001;
+mongoose.connect(process.env.MONGO_URI)
 
-client.connect().then(() => {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-});
+.then(() => app.listen(process.env.PORT || 3001, () =>
+  console.log(`Server running on port ${process.env.PORT || 3001}`)))
+.catch((err) => console.error(err));

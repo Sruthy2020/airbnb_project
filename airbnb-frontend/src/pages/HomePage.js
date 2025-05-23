@@ -9,17 +9,22 @@ const HomePage = () => {
   const [bedrooms, setBedrooms] = useState('');
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMsg('');
     try {
-      const res = await axios.get(`http://localhost:3001/api/listings/search`, {
-        params: { location, propertyType, bedrooms },
+      const res = await axios.get(`http://localhost:3001/api/listings/filter`, {
+        params: { location, type: propertyType, bedrooms },
       });
+
+      console.log("Fetched listings:", res.data);
       setListings(res.data);
     } catch (err) {
       console.error("Error fetching listings:", err);
+      setErrorMsg('Something went wrong. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -50,24 +55,25 @@ const HomePage = () => {
         <button type="submit">Search</button>
       </form>
 
+      {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
+
       {listings.length > 0 && (
-  <h3 style={{ marginTop: '2rem' }}>
-    {listings.length} Listings that match your preferences
-  </h3>
-)}
+        <h3 style={{ marginTop: '2rem' }}>
+          {listings.length} Listings that match your preferences
+        </h3>
+      )}
 
-<div className="results">
-  {loading ? (
-    <p>Loading listings...</p>
-  ) : listings.length === 0 ? (
-    <p>No listings found. Try searching with different filters.</p>
-  ) : (
-    listings.map((listing) => (
-      <ListingCard key={listing._id} listing={listing} />
-    ))
-  )}
-</div>
-
+      <div className="results">
+        {loading ? (
+          <p>Loading listings...</p>
+        ) : listings.length === 0 ? (
+          <p>No listings found. Try searching with different filters.</p>
+        ) : (
+          listings.map((listing) => (
+            <ListingCard key={listing._id} listing={listing} />
+          ))
+        )}
+      </div>
     </div>
   );
 };

@@ -25,9 +25,17 @@ const BookingPage = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:3001/api/bookings', {
-        listingId,
-        ...form,
+        listing_id: listingId,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        name: form.name,
+        email: form.email,
+        daytimePhone: form.postal,    
+        mobilePhone: form.mobile,
+        postalAddress: form.postal,
+        homeAddress: form.residential,
       });
+
       navigate('/confirmation');
     } catch (err) {
       console.error('Booking failed:', err);
