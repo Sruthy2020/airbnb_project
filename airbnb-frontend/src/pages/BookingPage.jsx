@@ -16,13 +16,20 @@ import {
 import axios from 'axios';
 
 const BookingPage = () => {
+  //get the listing_id from the URL query parameters..
   const location = useLocation();
+  //urlSearchParams is used to parse the query parameters from the URL...
   const params = new URLSearchParams(location.search);
+  //get the listing_id from the query parameters...
   const listingId = params.get("listing_id");
 
+  //if listingId is not present, redirect to home page...
   const navigate = useNavigate();
   const toast = useToast();
 
+
+
+  //form state to hold booking details...
   const [form, setForm] = useState({
     startDate: '',
     endDate: '',
@@ -33,19 +40,28 @@ const BookingPage = () => {
     residential: '',
   });
 
+
+
+
+  //handle form input changes...
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  
+
+//email, mobile, name validation functions...
   const isValidEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
   const isValidMobile = (mobile) =>
     /^04\d{2}\s?\d{3}\s?\d{3}$/.test(mobile);
-
   const isValidName = (name) =>
     /^[a-zA-Z\s]+$/.test(name);
 
+
+
+
+  //handle form submission...
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -139,6 +155,9 @@ const BookingPage = () => {
       });
     }
   };
+
+
+
 
   return (
     <Box maxW="600px" mx="auto" py={10} px={4}>

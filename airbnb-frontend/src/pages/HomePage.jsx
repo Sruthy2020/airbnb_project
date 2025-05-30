@@ -18,17 +18,24 @@ import {
 import ListingCard from '../components/ListingCard';
 
 const HomePage = () => {
+  //state variables for form inputs and listings..
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [bedrooms, setBedrooms] = useState('');
   const [listings, setListings] = useState([]);
+  //state variables for loading, error messages, and seting limits..
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [limit, setLimit] = useState(10);
+  //state variable to track if search has been triggered..
   const [searchTriggered, setSearchTriggered] = useState(false);
-
+//toast for displaying messages..
   const toast = useToast();
 
+
+
+
+  //useCallback to fetch listings from the API with the given parameters..
   const fetchListings = useCallback(
     async (params) => {
       setLoading(true);
@@ -54,6 +61,9 @@ const HomePage = () => {
     [limit, toast]
   );
 
+
+
+  //handle form submission to fetch listings based on user input..
   const handleSubmit = (e) => {
     e.preventDefault();
     setLimit(10);
@@ -61,11 +71,18 @@ const HomePage = () => {
     fetchListings({ location, type: propertyType, bedrooms });
   };
 
+
+//useEffect to fetch listings when the component mounts or when search parameters change..
   useEffect(() => {
     if (searchTriggered) {
       fetchListings({ location, type: propertyType, bedrooms });
     }
   }, [bedrooms, fetchListings, limit, location, propertyType, searchTriggered]);
+
+
+
+
+
 
   return (
     <Box maxW="1200px" mx="auto" px={4} py={8}>

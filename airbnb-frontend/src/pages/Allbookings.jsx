@@ -17,13 +17,17 @@ import {
 import axios from 'axios';
 
 const AllBookings = () => {
+  //state to hold bookings...
   const [bookings, setBookings] = useState([]);
+  //state to handle loading....
   const [loading, setLoading] = useState(true);
+  //state to handle errors...
   const [error, setError] = useState("");
 
   const cardBg = useColorModeValue('gray.50', 'gray.800');
   const labelColor = useColorModeValue('gray.600', 'gray.300');
 
+  //fetch bookings from the API when the component mounts.. backend API is running on localhost:3001..
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -40,6 +44,7 @@ const AllBookings = () => {
     fetchBookings();
   }, []);
 
+  //if loading, show a spinner...
   if (loading) {
     return (
       <Box textAlign="center" mt={10}>
@@ -48,6 +53,7 @@ const AllBookings = () => {
     );
   }
 
+  //if there's an error, show an alert...
   if (error) {
     return (
       <Alert status="error" mt={6}>
@@ -67,9 +73,11 @@ const AllBookings = () => {
         <Text textAlign="center" fontSize="lg" color="gray.500">
           No bookings have been made yet.
         </Text>
+
       ) : (
         <VStack spacing={6} align="stretch">
           {bookings.map((booking, index) => (
+            
             <Card
               key={booking._id || index}
               borderRadius="xl"
@@ -78,31 +86,39 @@ const AllBookings = () => {
               transition="0.3s"
               _hover={{ transform: 'scale(1.01)', boxShadow: 'xl' }}
             >
+
+
               <CardBody>
                 <HStack justify="space-between" wrap="wrap" mb={2}>
+
+
                   <Box>
                     <Text fontSize="sm" color={labelColor}>
                       Name
                     </Text>
                     <Text fontWeight="bold">{booking.name}</Text>
                   </Box>
+
                   <Box>
                     <Text fontSize="sm" color={labelColor}>
                       Email
                     </Text>
                     <Text>{booking.email}</Text>
                   </Box>
+
                   <Box>
                     <Text fontSize="sm" color={labelColor}>
                       Mobile
                     </Text>
                     <Text>{booking.mobilePhone}</Text>
                   </Box>
+
                 </HStack>
 
                 <Divider my={3} />
 
                 <HStack justify="space-between" wrap="wrap" mb={2}>
+
                   <Box>
                     <Text fontSize="sm" color={labelColor}>
                       Check-in
@@ -111,6 +127,7 @@ const AllBookings = () => {
                       {new Date(booking.startDate).toLocaleDateString()}
                     </Badge>
                   </Box>
+
                   <Box>
                     <Text fontSize="sm" color={labelColor}>
                       Check-out
@@ -119,6 +136,7 @@ const AllBookings = () => {
                       {new Date(booking.endDate).toLocaleDateString()}
                     </Badge>
                   </Box>
+
                   <Box>
                     <Text fontSize="sm" color={labelColor}>
                       Listing ID
@@ -127,19 +145,23 @@ const AllBookings = () => {
                       {booking.listing_id}
                     </Text>
                   </Box>
+
                 </HStack>
 
                 <Divider my={3} />
 
                 <Box fontSize="sm" color="gray.600">
+
                   <Text>
                     <strong>Postal Address:</strong>{' '}
                     {booking.postalAddress || 'N/A'}
                   </Text>
+
                   <Text>
                     <strong>Home Address:</strong>{' '}
                     {booking.homeAddress || 'N/A'}
                   </Text>
+                  
                 </Box>
               </CardBody>
             </Card>

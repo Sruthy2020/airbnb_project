@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//define the booking schema..
 const bookingSchema = new mongoose.Schema({
   listing_id: { type: String, required: true },
   startDate: { type: Date, required: true },

@@ -36,13 +36,17 @@ const ConfirmationPage = () => (
       bg="white"
     >
       <VStack spacing={4}>
+
         <Icon as={CheckCircleIcon} boxSize={10} color="green.400" />
+
         <Heading size="lg" color="green.500">
           Booking Successful!
         </Heading>
+
         <Text fontSize="md" color="gray.600">
           Your booking has been saved. We'll email you the details shortly.
         </Text>
+
         <Button
           as={RouterLink}
           to="/"
@@ -53,6 +57,7 @@ const ConfirmationPage = () => (
         >
           ← Return to Homepage
         </Button>
+        
       </VStack>
     </MotionBox>
   </Flex>

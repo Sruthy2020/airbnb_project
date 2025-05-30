@@ -3,6 +3,7 @@ const router = express.Router();
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGO_URI;
 
+//get all listings with optional filters...
 router.get("/filter", async (req, res) => {
   const { location, type, bedrooms } = req.query;
 
