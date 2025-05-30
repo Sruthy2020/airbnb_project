@@ -47,6 +47,6 @@
 #### How to Run?
 * cd airbnb-frontend -> npm start
 * cd airbnb-backend -> npm start
-
+* npm install : install all packages
 
 
