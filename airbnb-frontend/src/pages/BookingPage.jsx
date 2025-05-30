@@ -41,7 +41,7 @@ const BookingPage = () => {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const isValidMobile = (mobile) =>
-    /^04\d{2} \d{3} \d{3}$/.test(mobile);
+    /^04\d{2}\s?\d{3}\s?\d{3}$/.test(mobile);
 
   const isValidName = (name) =>
     /^[a-zA-Z\s]+$/.test(name);
@@ -98,7 +98,7 @@ const BookingPage = () => {
     if (!isValidMobile(mobile)) {
       toast({
         title: 'Invalid mobile number',
-        description: 'Mobile must be in the format 04xx xxx xxx.',
+        description: 'Mobile number must start with 04 and be 10 digits(with or without spaces).',
         status: 'error',
         duration: 3000,
         isClosable: true,
