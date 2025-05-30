@@ -37,19 +37,86 @@ const BookingPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const isValidMobile = (mobile) =>
+    /^04\d{2} \d{3} \d{3}$/.test(mobile);
+
+  const isValidName = (name) =>
+    /^[a-zA-Z\s]+$/.test(name);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const {
+      startDate,
+      endDate,
+      name,
+      email,
+      mobile,
+      postal,
+      residential,
+    } = form;
+
+    const checkIn = new Date(startDate);
+    const checkOut = new Date(endDate);
+
+    if (!startDate || !endDate || checkOut <= checkIn) {
+      toast({
+        title: 'Invalid dates',
+        description: 'Check-out must be after check-in.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!isValidName(name)) {
+      toast({
+        title: 'Invalid name',
+        description: 'Name should contain only letters and spaces.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      toast({
+        title: 'Invalid email',
+        description: 'Please enter a valid email address.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!isValidMobile(mobile)) {
+      toast({
+        title: 'Invalid mobile number',
+        description: 'Mobile must be in the format 04xx xxx xxx.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     try {
       await axios.post('http://localhost:3001/api/bookings', {
         listing_id: listingId,
-        startDate: form.startDate,
-        endDate: form.endDate,
-        name: form.name,
-        email: form.email,
-        daytimePhone: form.postal,
-        mobilePhone: form.mobile,
-        postalAddress: form.postal,
-        homeAddress: form.residential,
+        startDate,
+        endDate,
+        name,
+        email,
+        daytimePhone: postal,
+        mobilePhone: mobile,
+        postalAddress: postal,
+        homeAddress: residential,
       });
 
       toast({
@@ -65,7 +132,7 @@ const BookingPage = () => {
       console.error('Booking failed:', err);
       toast({
         title: 'Booking failed',
-        description: 'Please try again later.',
+        description: err.response?.data?.error || 'Please try again later.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -90,14 +157,26 @@ const BookingPage = () => {
               <HStack spacing={4} flexWrap="wrap">
                 <FormControl isRequired flex="1">
                   <FormLabel>Check In</FormLabel>
-                  <Input type="date" name="startDate" value={form.startDate} onChange={handleChange} />
-                  </FormControl>
-                
+                  <Input
+                    type="date"
+                    name="startDate"
+                    value={form.startDate}
+                    onChange={handleChange}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </FormControl>
+
                 <FormControl isRequired flex="1">
                   <FormLabel>Check Out</FormLabel>
-                  <Input type="date" name="endDate" value={form.endDate} onChange={handleChange} />
-                  </FormControl>
-                </HStack>
+                  <Input
+                    type="date"
+                    name="endDate"
+                    value={form.endDate}
+                    onChange={handleChange}
+                    min={form.startDate || new Date().toISOString().split('T')[0]}
+                  />
+                </FormControl>
+              </HStack>
 
               <Heading size="sm" mt={4} color="gray.700">
                 Your Details
@@ -105,43 +184,68 @@ const BookingPage = () => {
 
               <FormControl isRequired>
                 <FormLabel>Your Name</FormLabel>
-                <Input name="name" placeholder="Your name" value={form.name} onChange={handleChange} />
+                <Input
+                  name="name"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <FormControl isRequired>
                 <FormLabel>Email Address</FormLabel>
-                <Input name="email" type="email" placeholder="you@example.com" value={form.email} onChange={handleChange} />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <FormControl isRequired>
                 <FormLabel>Mobile Number</FormLabel>
-                <Input name="mobile" placeholder="04xx xxx xxx" value={form.mobile} onChange={handleChange} />
+                <Input
+                  name="mobile"
+                  placeholder="04xx xxx xxx"
+                  value={form.mobile}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <FormControl>
                 <FormLabel>Postal Address</FormLabel>
-                <Input name="postal" placeholder="Your postal address" value={form.postal} onChange={handleChange} />
+                <Input
+                  name="postal"
+                  placeholder="Your postal address"
+                  value={form.postal}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <FormControl>
                 <FormLabel>Residential Address</FormLabel>
-                <Input name="residential" placeholder="Home address (no PO Box)" value={form.residential} onChange={handleChange} />
+                <Input
+                  name="residential"
+                  placeholder="Home address (no PO Box)"
+                  value={form.residential}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <Button
-              type="submit"
-              colorScheme="red"
-              size="lg"
-              width="30%"
-              fontWeight="bold"
-              borderRadius="xl"
-              alignSelf="center"
-              mt={6}
-              _hover={{ bg: 'red.700' }}
+                type="submit"
+                colorScheme="red"
+                size="lg"
+                width="30%"
+                fontWeight="bold"
+                borderRadius="xl"
+                alignSelf="center"
+                mt={6}
+                _hover={{ bg: 'red.700' }}
               >
                 Book Now
               </Button>
-
             </VStack>
           </form>
         </CardBody>

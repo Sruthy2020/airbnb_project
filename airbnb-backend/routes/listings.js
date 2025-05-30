@@ -13,7 +13,9 @@ router.get("/filter", async (req, res) => {
     const collection = db.collection("listingsAndReviews");
 
     const query = {
-      ...(location && { "address.market": location }),
+      ...(location && {
+        "address.market": { $regex: new RegExp(`^${location}$`, "i") }, 
+      }),
       ...(type && { property_type: type }),
       ...(bedrooms && { bedrooms: parseInt(bedrooms) }),
     };
