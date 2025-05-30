@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -29,27 +29,30 @@ const HomePage = () => {
 
   const toast = useToast();
 
-  const fetchListings = async (params) => {
-    setLoading(true);
-    setErrorMsg('');
-    try {
-      const res = await axios.get('http://localhost:3001/api/listings/filter', {
-        params: { ...params, limit },
-      });
-      setListings(res.data);
-    } catch (err) {
-      setErrorMsg('Something went wrong. Please try again later.');
-      toast({
-        title: 'Error fetching listings',
-        description: 'Please check your connection or try again later.',
-        status: 'error',
-        duration: 4000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchListings = useCallback(
+    async (params) => {
+      setLoading(true);
+      setErrorMsg('');
+      try {
+        const res = await axios.get('http://localhost:3001/api/listings/filter', {
+          params: { ...params, limit },
+        });
+        setListings(res.data);
+      } catch (err) {
+        setErrorMsg('Something went wrong. Please try again later.');
+        toast({
+          title: 'Error fetching listings',
+          description: 'Please check your connection or try again later.',
+          status: 'error',
+          duration: 4000,
+          isClosable: true,
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [limit, toast]
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -62,7 +65,7 @@ const HomePage = () => {
     if (searchTriggered) {
       fetchListings({ location, type: propertyType, bedrooms });
     }
-  }, [limit]);
+  }, [bedrooms, fetchListings, limit, location, propertyType, searchTriggered]);
 
   return (
     <Box maxW="1200px" mx="auto" px={4} py={8}>
