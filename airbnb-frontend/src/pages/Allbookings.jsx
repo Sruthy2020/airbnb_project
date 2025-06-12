@@ -17,17 +17,13 @@ import {
 import axios from 'axios';
 
 const AllBookings = () => {
-  //state to hold bookings...
   const [bookings, setBookings] = useState([]);
-  //state to handle loading....
   const [loading, setLoading] = useState(true);
-  //state to handle errors...
   const [error, setError] = useState("");
 
   const cardBg = useColorModeValue('gray.50', 'gray.800');
   const labelColor = useColorModeValue('gray.600', 'gray.300');
 
-  //fetch bookings from the API when the component mounts.. backend API is running on localhost:3001..
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -44,7 +40,6 @@ const AllBookings = () => {
     fetchBookings();
   }, []);
 
-  //if loading, show a spinner...
   if (loading) {
     return (
       <Box textAlign="center" mt={10}>
@@ -53,7 +48,6 @@ const AllBookings = () => {
     );
   }
 
-  //if there's an error, show an alert...
   if (error) {
     return (
       <Alert status="error" mt={6}>
@@ -73,96 +67,126 @@ const AllBookings = () => {
         <Text textAlign="center" fontSize="lg" color="gray.500">
           No bookings have been made yet.
         </Text>
-
       ) : (
         <VStack spacing={6} align="stretch">
           {bookings.map((booking, index) => (
-            
             <Card
               key={booking._id || index}
               borderRadius="xl"
               boxShadow="lg"
               bg={cardBg}
+              p={4}
               transition="0.3s"
               _hover={{ transform: 'scale(1.01)', boxShadow: 'xl' }}
             >
-
-
               <CardBody>
-                <HStack justify="space-between" wrap="wrap" mb={2}>
+                <VStack spacing={3} align="stretch">
+
+                  <HStack justify="space-between" wrap="wrap">
+                    <Box>
+                      <Text fontSize="sm" color={labelColor}>Name</Text>
+                      <Text fontWeight="bold">{booking.name}</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color={labelColor}>Email</Text>
+                      <Text>{booking.email}</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color={labelColor}>Mobile</Text>
+                      <Text>{booking.mobilePhone}</Text>
+                    </Box>
+                  </HStack>
+
+                  <Divider />
 
 
-                  <Box>
-                    <Text fontSize="sm" color={labelColor}>
-                      Name
+                  <HStack justify="space-between" wrap="wrap">
+                    <Box>
+                      <Text fontSize="sm" color={labelColor}>Check-in</Text>
+                      <Badge colorScheme="green" fontSize="md">
+                        {new Date(booking.startDate).toLocaleDateString()}
+                      </Badge>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color={labelColor}>Check-out</Text>
+                      <Badge colorScheme="red" fontSize="md">
+                        {new Date(booking.endDate).toLocaleDateString()}
+                      </Badge>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color={labelColor}>Listing ID</Text>
+                      <Text fontFamily="mono" fontSize="sm" color="gray.500">
+                        {booking.listing_id}
+                      </Text>
+                    </Box>
+                  </HStack>
+
+                  <Divider />
+
+
+                  <VStack spacing={3} align="stretch">
+                    <Text fontSize="m" fontWeight="semibold" color={labelColor}>
+                      Listing Info
                     </Text>
-                    <Text fontWeight="bold">{booking.name}</Text>
-                  </Box>
 
-                  <Box>
-                    <Text fontSize="sm" color={labelColor}>
-                      Email
+                    {booking.listing ? (
+                      <>
+                        <HStack justify="space-between" wrap="wrap">
+                          <Box>
+                            <Text fontSize="s" color={labelColor}>Name</Text>
+                            <Text fontSize="sm">{booking.listing.name || 'N/A'}</Text>
+                          </Box>
+                          <Box>
+                            <Text fontSize="s" color={labelColor}>Location</Text>
+                            <Text fontSize="sm">{booking.listing.address?.market || 'N/A'}</Text>
+                          </Box>
+                          <Box>
+                            <Text fontSize="s" color={labelColor}>Type</Text>
+                            <Text fontSize="sm">{booking.listing.property_type || 'N/A'}</Text>
+                          </Box>
+                        </HStack>
+
+                        {booking.listing.images?.picture_url && (
+                          <Box mt={3} w="100%" overflow="hidden" borderRadius="lg">
+                            <img
+                              src={booking.listing.images.picture_url}
+                              alt="Listing Preview"
+                              style={{
+                                width: "100%",
+                                maxHeight: "220px",
+                                objectFit: "cover",
+                                borderRadius: "12px",
+                              }}
+                            />
+                          </Box>
+                        )}
+                      </>
+                    ) : (
+                      <Text fontSize="sm" color="gray.400" fontStyle="italic">
+                        Listing not found or removed.
+                      </Text>
+                    )}
+                  </VStack>
+
+                  <Divider />
+
+
+                  <VStack spacing={3} align="stretch">
+                    <Text fontSize="m" fontWeight="semibold" color={labelColor}>
+                      Address Info
                     </Text>
-                    <Text>{booking.email}</Text>
-                  </Box>
-
-                  <Box>
-                    <Text fontSize="sm" color={labelColor}>
-                      Mobile
-                    </Text>
-                    <Text>{booking.mobilePhone}</Text>
-                  </Box>
-
-                </HStack>
-
-                <Divider my={3} />
-
-                <HStack justify="space-between" wrap="wrap" mb={2}>
-
-                  <Box>
-                    <Text fontSize="sm" color={labelColor}>
-                      Check-in
-                    </Text>
-                    <Badge colorScheme="green" fontSize="md">
-                      {new Date(booking.startDate).toLocaleDateString()}
-                    </Badge>
-                  </Box>
-
-                  <Box>
-                    <Text fontSize="sm" color={labelColor}>
-                      Check-out
-                    </Text>
-                    <Badge colorScheme="red" fontSize="md">
-                      {new Date(booking.endDate).toLocaleDateString()}
-                    </Badge>
-                  </Box>
-
-                  <Box>
-                    <Text fontSize="sm" color={labelColor}>
-                      Listing ID
-                    </Text>
-                    <Text fontFamily="mono" fontSize="sm" color="gray.500">
-                      {booking.listing_id}
-                    </Text>
-                  </Box>
-
-                </HStack>
-
-                <Divider my={3} />
-
-                <Box fontSize="sm" color="gray.600">
-
-                  <Text>
-                    <strong>Postal Address:</strong>{' '}
-                    {booking.postalAddress || 'N/A'}
-                  </Text>
-
-                  <Text>
-                    <strong>Home Address:</strong>{' '}
-                    {booking.homeAddress || 'N/A'}
-                  </Text>
-                  
-                </Box>
+                    <HStack spacing={4} wrap="wrap">
+                      <Box>
+                        <Text fontSize="s" color={labelColor}>Postal</Text>
+                        <Text fontSize="sm">{booking.postalAddress || 'N/A'}</Text>
+                      </Box>
+                      <Box>
+                        <Text fontSize="s" color={labelColor}>Home</Text>
+                        <Text fontSize="sm">{booking.homeAddress || 'N/A'}</Text>
+                      </Box>
+                    </HStack>
+                  </VStack>
+                </VStack>
               </CardBody>
             </Card>
           ))}
