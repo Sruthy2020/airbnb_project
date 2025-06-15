@@ -21,7 +21,7 @@ const AllBookings = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const cardBg = useColorModeValue('gray.50', 'gray.800');
+  const cardBg = useColorModeValue('white.50', 'gray.800');
   const labelColor = useColorModeValue('gray.600', 'gray.300');
   const bgColor = useColorModeValue('white', 'gray.900');
 
@@ -80,7 +80,14 @@ const AllBookings = () => {
               bg={cardBg}
               p={4}
               transition="0.3s"
-              _hover={{ transform: 'scale(1.01)', boxShadow: 'xl' }}
+              _hover={{
+                transform: 'scale(1.02)',
+                boxShadow: '0 8px 24px rgba(255, 90, 95, 0.3)',
+                borderColor: 'red.300',
+              }}
+              border="1px solid"
+              borderColor="gray.100"
+              cursor="pointer"
             >
               <CardBody>
                 <VStack spacing={3} align="stretch">
@@ -153,7 +160,7 @@ const AllBookings = () => {
                           <Box mt={3} w="100%" overflow="hidden" borderRadius="lg">
                             <img
                               src={booking.listing.images.picture_url}
-                              alt="Listing Preview"
+                              alt="Listing Preview not available"
                               style={{
                                 width: "100%",
                                 height: "100%",

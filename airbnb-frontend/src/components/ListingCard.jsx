@@ -49,11 +49,15 @@ const ListingCard = ({ listing }) => {
       border="1px solid"
       borderColor="gray.200"
       shadow="sm"
-      whileHover={{ scale: 1.015 }}
-      whileTap={{ scale: 0.98 }}
-      transition="all 0.2s ease-in-out"
-      _hover={{ shadow: "lg" }}
-    >
+      whileHover={{
+        scale: 1.03,
+        y: -5,
+        boxShadow: "0 8px 24px rgba(255, 90, 95, 0.3)",
+      }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      _hover={{ shadow: "xl", borderColor: "red.200" }}
+      >
 
       <VStack align="start" spacing={4}>
 
