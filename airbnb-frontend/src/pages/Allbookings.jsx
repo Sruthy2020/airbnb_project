@@ -23,6 +23,8 @@ const AllBookings = () => {
 
   const cardBg = useColorModeValue('gray.50', 'gray.800');
   const labelColor = useColorModeValue('gray.600', 'gray.300');
+  const bgColor = useColorModeValue('white', 'gray.900');
+
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -58,6 +60,7 @@ const AllBookings = () => {
   }
 
   return (
+    <Box bgGradient="linear(to-b, red.50, white)" _dark={{ bg: bgColor }} minH="100vh" py={16} px={4}>
     <Box maxW="1000px" mx="auto" py={10} px={4}>
       <Heading mb={8} color="red.500" textAlign="center">
         All Bookings
@@ -153,9 +156,10 @@ const AllBookings = () => {
                               alt="Listing Preview"
                               style={{
                                 width: "100%",
-                                maxHeight: "220px",
+                                height: "100%",
                                 objectFit: "cover",
                                 borderRadius: "12px",
+                                display: "block",
                               }}
                             />
                           </Box>
@@ -192,6 +196,7 @@ const AllBookings = () => {
           ))}
         </VStack>
       )}
+    </Box>
     </Box>
   );
 };

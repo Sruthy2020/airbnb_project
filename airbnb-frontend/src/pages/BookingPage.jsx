@@ -160,6 +160,7 @@ const BookingPage = () => {
 
 
   return (
+    <Box bgGradient="linear(to-b, red.50, white)" minH="100vh" py={16} px={4}>
     <Box maxW="600px" mx="auto" py={10} px={4}>
       <Heading mb={6} color="red.400" textAlign="center">
         Let's Book the Property
@@ -270,6 +271,7 @@ const BookingPage = () => {
         </CardBody>
       </Card>
     </Box>
+  </Box>
   );
 };
 

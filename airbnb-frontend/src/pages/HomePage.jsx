@@ -26,12 +26,27 @@ const HomePage = () => {
   //state variables for loading, error messages, and seting limits..
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(1000);
   //state variable to track if search has been triggered..
   const [searchTriggered, setSearchTriggered] = useState(false);
 //toast for displaying messages..
   const toast = useToast();
 
+
+
+const fetchRandomListings = useCallback(async () => {
+  setLoading(true);
+  try {
+    const res = await axios.get('http://localhost:3001/api/listings/random', {
+      params: { limit }, 
+    });
+    setListings(res.data);
+  } catch (err) {
+    setErrorMsg('Could not load random listings.');
+  } finally {
+    setLoading(false);
+  }
+}, [limit]);
 
 
 
@@ -66,10 +81,15 @@ const HomePage = () => {
   //handle form submission to fetch listings based on user input..
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLimit(10);
+    setLimit(1000);
     setSearchTriggered(true);
     fetchListings({ location, type: propertyType, bedrooms });
   };
+
+   useEffect(() => {
+    fetchRandomListings();
+  }, [fetchRandomListings]);
+
 
 
 //useEffect to fetch listings when the component mounts or when search parameters change..
@@ -85,7 +105,8 @@ const HomePage = () => {
 
 
   return (
-    <Box maxW="1200px" mx="auto" px={4} py={8}>
+    <Box bgGradient="linear(to-b, red.50, white)" _dark={{ bg: "gray.800" }} minH="100vh">
+    <Box maxW="1200px" mx="auto" px={6} py={12} mt={0}>
       <Heading textAlign="center" color="red.400" mb={6}>
         Explore Stays
       </Heading>
@@ -171,7 +192,7 @@ const HomePage = () => {
       {listings.length >= limit && searchTriggered && (
         <Center mt={10}>
           <Button
-            onClick={() => setLimit((prev) => prev + 10)}
+            onClick={() => setLimit((prev) => prev + 1000)}
             colorScheme="red"
             variant="outline"
           >
@@ -179,6 +200,7 @@ const HomePage = () => {
           </Button>
         </Center>
       )}
+    </Box>
     </Box>
   );
 };

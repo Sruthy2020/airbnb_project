@@ -22,7 +22,7 @@ router.get("/filter", async (req, res) => {
     };
     console.log("Final MongoDB Query:", query); 
 
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit);
     const listings = await collection.find(query).limit(limit).toArray();
 
     res.json(listings);
@@ -33,5 +33,25 @@ router.get("/filter", async (req, res) => {
     await client.close();
   }
 });
+
+router.get("/random", async (req, res) => {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const db = client.db("sample_airbnb");
+    const limit = parseInt(req.query.limit);
+    const listings = await db.collection("listingsAndReviews")
+      .aggregate([{ $sample: { size: limit } }])
+      .toArray();
+
+    res.json(listings);
+  } catch (err) {
+    console.error("Failed to fetch random listings:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    await client.close();
+  }
+});
+
 
 module.exports = router;
