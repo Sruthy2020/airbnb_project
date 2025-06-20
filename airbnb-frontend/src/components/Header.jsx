@@ -1,4 +1,4 @@
-import { Box, Flex, Link, HStack, Image } from '@chakra-ui/react';
+import { Box, Flex, Link, HStack, Image, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Header = () => (
@@ -16,8 +16,17 @@ const Header = () => (
   >
     <Flex align="center" justify="space-between" position="relative">
       {/*logo */}
-      <Link as={RouterLink} to="/" display="flex" alignItems="center" gap={3}>
-        <Image src="/logo.png" alt="AirStay Logo" width={100} />
+      <Link
+      as={RouterLink}
+      to="/"
+      display="flex"
+      alignItems="center"
+      gap={3}
+      textDecoration="none"
+      _hover={{ textDecoration: "none" }}
+      >
+        <Image src="/logo.png" alt="AirStay Logo" width={8} height={8} />
+        <Text fontSize="xl" fontWeight="bold" color="red.500">airstay</Text>
       </Link>
 
       {/*navbar*/}

@@ -15,7 +15,7 @@ const Footer = () => (
       </Link>
     </HStack>
     <Text fontSize="xs" color="gray.500">
-      © {new Date().getFullYear()} AirStay. All rights reserved.
+      © {new Date().getFullYear()} AirStay. All rights reserved. Developed by Sruthy.
     </Text>
   </Box>
 );
