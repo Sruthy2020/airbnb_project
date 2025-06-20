@@ -1,6 +1,9 @@
 # AIRBNB PROJECT 
+
+![App Logo](airbnb-frontend/public/logo.png)
 * Assignment 3
 * s3988110
+
 
 ### Tech Stack: MERN Stack
 * MongoDB
